@@ -15,7 +15,7 @@ private:
     BigUnsigned k;
 public:
     Elgamal();
-    void init(unsigned short keyLength, const BigUnsigned& modulus);
+    void init(const BigUnsigned& modulus);
     void* encrypt(const BigUnsigned& msg);
     BigUnsigned decrypt(void* cipher);
 

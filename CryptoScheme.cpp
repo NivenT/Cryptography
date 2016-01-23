@@ -42,18 +42,24 @@ BigUnsigned CryptoScheme::genPrime(unsigned short numBits) {
 }
 
 BigUnsigned CryptoScheme::findGenerator(const BigUnsigned& n) {
-    const short numBits = bigUnsignedToString(n).size()*3-2;
-    BigUnsigned gen = random(numBits);
+    BigUnsigned gen = random(n.bitLength());
     while(gcd(gen, n) != 1) {
-        gen = random(numBits);
+        gen = random(n.bitLength());
     }
     return gen;
 }
 
+BigUnsigned CryptoScheme::findOrder(const BigUnsigned& n, const BigUnsigned& modulus) {
+    BigUnsigned a = n*n;
+    for (BigUnsigned order = 2;; order++) {
+        if (a == 1) return order;
+        a = (a*n)%modulus;
+    }
+}
+
 bool CryptoScheme::isProbablyPrime(const BigUnsigned& n) {
-    const short numBits = bigUnsignedToString(n).size()*3-2;
     for (int i = 0; i < 30; i++) {
-        BigUnsigned a = random(numBits);
+        BigUnsigned a = random(n.bitLength());
         if (modexp(a, n-1, n) != 1) return false;
     }
     return true;

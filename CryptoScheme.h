@@ -13,11 +13,12 @@ public:
     static BigUnsigned random(unsigned short numBits);
     static BigUnsigned genPrime(unsigned short numBits);
     static BigUnsigned findGenerator(const BigUnsigned& n);
+    static BigUnsigned findOrder(const BigUnsigned& n, const BigUnsigned& modulus);
     static bool isProbablyPrime(const BigUnsigned& num);
 
     virtual void* encrypt(const BigUnsigned& msg) = 0;
     virtual BigUnsigned decrypt(void* cipher) = 0;
-    virtual void init(unsigned short keyLength, const BigUnsigned& modulus) = 0;
+    virtual void init(const BigUnsigned& modulus) = 0;
 };
 
 #endif // CRYPTOSCHEME_H_INCLUDED
