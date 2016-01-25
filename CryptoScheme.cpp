@@ -5,7 +5,7 @@
 CryptoScheme::CryptoScheme() {
 }
 
-std::vector<BigUnsigned> CryptoScheme::encode(const std::string& msg, const BigUnsigned& modulus) {
+std::vector<BigUnsigned> CryptoScheme::encode(const std::string& msg) {
     std::vector<BigUnsigned> encoding(msg.size());
     for (int i = 0; i < msg.size(); i++) {
         encoding[i] = msg[i];
@@ -13,11 +13,10 @@ std::vector<BigUnsigned> CryptoScheme::encode(const std::string& msg, const BigU
     return encoding;
 }
 
-std::string CryptoScheme::decode(const std::vector<BigUnsigned>& enc, const BigUnsigned& modulus) {
+std::string CryptoScheme::decode(const std::vector<BigUnsigned>& enc) {
     std::string res = "";
     for (auto& e : enc) {
-        int c = e.toInt();
-        res += (char)c;
+        res += e.toInt();
     }
     return res;
 }
@@ -41,7 +40,7 @@ BigUnsigned CryptoScheme::genPrime(unsigned short numBits) {
     return prime;
 }
 
-BigUnsigned CryptoScheme::findGenerator(const BigUnsigned& n) {
+BigUnsigned CryptoScheme::genCoprime(const BigUnsigned& n) {
     BigUnsigned gen = random(n.bitLength());
     while(gcd(gen, n) != 1) {
         gen = random(n.bitLength());

@@ -22,8 +22,8 @@ BigUnsigned DLPAttacker::naive(const BigUnsigned& g, const BigUnsigned& h, const
 
 BigUnsigned DLPAttacker::babyGiant(const BigUnsigned& g, const BigUnsigned& h, const BigUnsigned& p, const BigUnsigned& order) {
     BigUnsigned o = (order == 0) ? CryptoScheme::findOrder(g, p) : order;
-    BigUnsigned n = (o >> (o.bitLength()/2));
-    //while ((n-1)*(n-1) > o) n--;
+    BigUnsigned n = (o >> (o.bitLength()/2)); ///approximately sqrt(o)
+    //while ((n-1)*(n-1) > o) n--; /// n = 1+floor(sqrt(o))
     #ifdef DEBUG
     cout<<"g:     "<<g<<endl
         <<"h:     "<<h<<endl

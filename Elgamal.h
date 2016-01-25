@@ -9,15 +9,16 @@ typedef std::pair<BigUnsigned, BigUnsigned> Epair;
 
 class Elgamal : public CryptoScheme {
 private:
-    Epair encrypt(const BigUnsigned& msg, const BigUnsigned& k);
+    Epair encrypt(const BigUnsigned& msg, const BigUnsigned& k) const;
 
     BigUnsigned priv;
     BigUnsigned k;
 public:
     Elgamal();
-    void init(const BigUnsigned& modulus);
-    void* encrypt(const BigUnsigned& msg);
-    BigUnsigned decrypt(void* cipher);
+    void init(unsigned short keyLength);
+    void* encrypt(const BigUnsigned& msg) const;
+    BigUnsigned decrypt(void* cipher) const;
+    BigUnsigned getModulus() const;
 
     BigUnsigned pub;
     BigUnsigned p, g;
