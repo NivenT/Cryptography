@@ -49,16 +49,30 @@ BigUnsigned CryptoScheme::genCoprime(const BigUnsigned& n) {
 }
 
 BigUnsigned CryptoScheme::findOrder(const BigUnsigned& n, const BigUnsigned& modulus) {
-    BigUnsigned a = n*n;
+    BigUnsigned a = (n*n)%modulus;
     for (BigUnsigned order = 2;; order++) {
         if (a == 1) return order;
         a = (a*n)%modulus;
     }
 }
 
+#include <iostream>
+
+using namespace std;
+
+// Slow
+BigUnsigned CryptoScheme::primePi(const BigUnsigned& n) {
+    BigUnsigned c = 0;
+    for (BigUnsigned i = 0; i <= n; i++) {
+        if (isProbablyPrime(i)) c++;
+    }
+    return c;
+}
+
 bool CryptoScheme::isProbablyPrime(const BigUnsigned& n) {
+    if (n%2 == 0 || n==1) return n==2;
     for (int i = 0; i < 30; i++) {
-        BigUnsigned a = random(n.bitLength());
+        BigUnsigned a = random(n.bitLength()-1);
         if (modexp(a, n-1, n) != 1) return false;
     }
     return true;

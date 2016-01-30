@@ -14,6 +14,7 @@ public:
     static BigUnsigned genPrime(unsigned short numBits);
     static BigUnsigned genCoprime(const BigUnsigned& n);
     static BigUnsigned findOrder(const BigUnsigned& n, const BigUnsigned& modulus);
+    static BigUnsigned primePi(const BigUnsigned& n); ///used to test accuracy of isProbablyPrime
     static bool isProbablyPrime(const BigUnsigned& num);
 
     virtual BigUnsigned getModulus() const = 0;

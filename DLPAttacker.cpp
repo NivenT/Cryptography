@@ -6,7 +6,6 @@
     using namespace std;
 #endif // DEBUG
 
-#include <algorithm>
 #include <map>
 
 #include "CryptoScheme.h"

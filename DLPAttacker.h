@@ -9,7 +9,7 @@
         * h
         * p
         * g
-    Computer:
+    Compute:
         * x
 */
 class DLPAttacker {

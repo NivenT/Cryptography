@@ -1,4 +1,4 @@
-//#define ATTACK
+#define ATTACK
 
 #define ELGAMAL     0
 #define USING_RSA   1
@@ -11,6 +11,7 @@
 #include "Elgamal.h"
 #include "DLPAttacker.h"
 #include "RSA.h"
+#include "IntegerFactorer.h"
 
 using namespace std;
 
@@ -22,7 +23,11 @@ int main() {
     #endif // ENCRYPTION
 
     #ifdef ATTACK
-        crypt->init(30); //takes ~50 minutes on my computer to crack, 20 takes ~10 seconds
+        #if (ENCRYPTION == ELGAMAL)
+            crypt->init(25);
+        #elif (ENCRYPTION == USING_RSA)
+            crypt->init(50);
+        #endif //ENCRYPTION
     #else
         crypt->init(200);
     #endif //ATTACK
@@ -54,6 +59,15 @@ int main() {
                 decryption[i] = (p.second*modinv(modexp(eCrypt->pub, k, mod), mod))%mod;
             }
         #elif (ENCRYPTION == USING_RSA)
+            RSA* rCrypt = (RSA*)crypt;
+
+            BigUnsigned p = IntFactorer::pollard(rCrypt->getModulus());
+            BigUnsigned q = rCrypt->getModulus()/p;
+            BigUnsigned d = modinv(rCrypt->pub, (p-1)*(q-1));
+            for (int i = 0; i < cipher.size(); i++) {
+                BigUnsigned c = *(BigUnsigned*)cipher[i];
+                decryption[i] = modexp(c, d, rCrypt->getModulus());
+            }
         #endif // ENCRYPTION
         chrono::seconds durr = chrono::duration_cast<chrono::seconds>(chrono::high_resolution_clock::now() - start);
         cout<<"Decrypted message: "<<CryptoScheme::decode(decryption)<<endl
