@@ -12,10 +12,26 @@
 #include "DLPAttacker.h"
 #include "RSA.h"
 #include "IntegerFactorer.h"
+#include "FiniteField.h"
 
 using namespace std;
 
 int main() {
+    const PrimeField f23(23);
+    FieldElement a = f23.makeElement(11), b = f23(20);
+
+    PolyDomain p23(&f23);
+    Polynomial c = p23({f23(1),f23(2),f23(3),f23(4),f23(5)});
+
+    cout<<a<<" + "<<b<<" = "<<a+b<<endl
+        <<a<<" - "<<b<<" = "<<a-b<<endl
+        <<a<<" * "<<b<<" = "<<a*b<<endl
+        <<a<<" / "<<b<<" = "<<a/b<<endl
+        <<"-"<<a<<" = "<<-a<<endl
+        <<"("<<a<<")^-1 = "<<a.inverse()<<endl
+        <<c<<endl;
+    return 0;
+
     #if (ENCRYPTION == ELGAMAL)
         CryptoScheme* crypt = new Elgamal;
     #elif (ENCRYPTION == USING_RSA)

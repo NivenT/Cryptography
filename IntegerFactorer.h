@@ -1,5 +1,5 @@
-#ifndef INTEGERFACTORIZER_H_INCLUDED
-#define INTEGERFACTORIZER_H_INCLUDED
+#ifndef INTEGERFACTORER_H_INCLUDED
+#define INTEGERFACTORER_H_INCLUDED
 
 #include <BigIntegerLibrary.hh>
 
@@ -16,4 +16,4 @@ public:
     static BigUnsigned pollard(const BigUnsigned& n); // n=p*q
 };
 
-#endif // INTEGERFACTORIZER_H_INCLUDED
+#endif // INTEGERFACTORER_H_INCLUDED

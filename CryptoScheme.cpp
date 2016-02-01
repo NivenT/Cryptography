@@ -56,10 +56,6 @@ BigUnsigned CryptoScheme::findOrder(const BigUnsigned& n, const BigUnsigned& mod
     }
 }
 
-#include <iostream>
-
-using namespace std;
-
 // Slow
 BigUnsigned CryptoScheme::primePi(const BigUnsigned& n) {
     BigUnsigned c = 0;
