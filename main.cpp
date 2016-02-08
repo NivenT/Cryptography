@@ -21,7 +21,8 @@ int main() {
     FieldElement a = f23.makeElement(11), b = f23(20);
 
     PolyDomain p23(&f23);
-    Polynomial c = p23({f23(1),f23(2),f23(3),f23(4),f23(5)});
+    Polynomial c1 = p23({f23(12),f23(23),f23(33),f23(46),f23(15)}),
+               c2 = p23({f23(64),f23(57),f23(84)});
 
     cout<<a<<" + "<<b<<" = "<<a+b<<endl
         <<a<<" - "<<b<<" = "<<a-b<<endl
@@ -29,7 +30,13 @@ int main() {
         <<a<<" / "<<b<<" = "<<a/b<<endl
         <<"-"<<a<<" = "<<-a<<endl
         <<"("<<a<<")^-1 = "<<a.inverse()<<endl
-        <<c<<endl;
+        <<"("<<c1<<") + ("<<c2<<") = "<<c1+c2<<endl
+        <<"("<<c1<<") - ("<<c2<<") = "<<c1-c2<<endl
+        <<"("<<c2<<") - ("<<c1<<") = "<<c2-c1<<endl
+        <<"-("<<c1<<") = "<<-c1<<endl
+        <<a<<" * ("<<c1<<") = "<<c1*a<<endl
+        <<"("<<c1<<") * ("<<c2<<") = "<<c1*c2<<endl
+        <<"("<<c1<<") % ("<<c2<<") = "<<c1%c2<<endl;
     return 0;
 
     #if (ENCRYPTION == ELGAMAL)

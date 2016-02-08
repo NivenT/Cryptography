@@ -27,6 +27,7 @@ private:
     const PrimeField* field;
     BigUnsigned n;
 public:
+    FieldElement();
     const PrimeField* getField() const;
     BigUnsigned getMod() const;
     BigUnsigned getVal() const;
@@ -37,6 +38,8 @@ public:
     FieldElement operator*(const FieldElement& rhs) const;
     FieldElement operator/(const FieldElement& rhs) const;
     FieldElement operator-() const;
+
+    bool operator==(const FieldElement& rhs) const;
 
     friend PrimeField;
 };
@@ -68,13 +71,18 @@ private:
     std::vector<FieldElement> coeffs;
 public:
     const PolyDomain* getDomain() const;
+    FieldElement leadingCoefficient() const;
     BigUnsigned getMod() const;
+    BigUnsigned degree() const;
+    Polynomial trim() const;
     std::size_t size() const;
 
     FieldElement operator[](unsigned int index) const;
     Polynomial operator+(const Polynomial& rhs) const;
     Polynomial operator-(const Polynomial& rhs) const;
+    Polynomial operator*(const FieldElement& rhs) const;
     Polynomial operator*(const Polynomial& rhs) const;
+    Polynomial operator%(const Polynomial& rhs) const;
     Polynomial operator-() const;
 
     friend PolyDomain;

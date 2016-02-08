@@ -2,6 +2,8 @@
 
 #include "FiniteField.h"
 
+FieldElement::FieldElement() : n(0), field(nullptr) {}
+
 FieldElement::FieldElement(const BigUnsigned& n, const PrimeField* f) : n(n%f->getMod()), field(f) {}
 
 BigUnsigned FieldElement::getMod() const {
@@ -42,6 +44,11 @@ FieldElement FieldElement::operator/(const FieldElement& rhs) const {
 
 FieldElement FieldElement::operator-() const {
     return FieldElement(getMod()-n, field);
+}
+
+bool FieldElement::operator==(const FieldElement& rhs) const {
+    if (!field || !rhs.field) return false; ///This may not be the correct return value
+    return n==rhs.n && field==rhs.field;
 }
 
 std::ostream& operator<<(std::ostream &os, const FieldElement& x) {
