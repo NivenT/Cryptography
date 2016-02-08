@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cassert>
 
+#include "CryptoScheme.h"
 #include "FiniteField.h"
 
 PolyDomain::PolyDomain(const PrimeField* f) : field(f) {}
@@ -14,13 +15,32 @@ Polynomial PolyDomain::makeElement(const BigUnsigned& c) const {
 }
 
 Polynomial PolyDomain::makeElement(const FieldElement& c) const {
+    /*
+    assert(c.getMod() == field->getMod());
+    if (c.getField() == field) return makeElement(std::vector<FieldElement>(1,c));
+    return makeElement(std::vector<FieldElement>(1, field->makeElement(c.getVal())));
+    */
     assert(c.getField() == field);
-    return makeElement(std::vector<FieldElement>(1, c));
+    return makeElement(std::vector<FieldElement>(1,c));
 }
 
 Polynomial PolyDomain::makeElement(const std::vector<FieldElement>& coeffs) const {
     for (auto& c : coeffs) assert(c.getField() == field);
     return Polynomial(coeffs, this);
+}
+
+Polynomial PolyDomain::randomPoly(const BigUnsigned& degree) const {
+    std::vector<FieldElement> coefficients;
+    for (BigUnsigned i = 0; i <= degree; i++) {
+        coefficients.push_back(field->makeElement(CryptoScheme::random(field->getMod().bitLength())));
+    }
+    return makeElement(coefficients);
+}
+
+Polynomial PolyDomain::generateIrreducible(const BigUnsigned& degree) const {
+    Polynomial poly = randomPoly(degree);
+    while (!poly.isIrreducible()) poly = randomPoly(degree);
+    return poly;
 }
 
 Polynomial PolyDomain::operator()(const BigUnsigned& c) const {

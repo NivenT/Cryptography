@@ -2,7 +2,13 @@
 
 #include "CryptoScheme.h"
 
+std::mt19937_64 CryptoScheme::rng;
+
 CryptoScheme::CryptoScheme() {
+}
+
+void CryptoScheme::seedRNG() {
+    rng = std::mt19937_64(std::chrono::high_resolution_clock::now().time_since_epoch().count());
 }
 
 std::vector<BigUnsigned> CryptoScheme::encode(const std::string& msg) {
@@ -22,8 +28,6 @@ std::string CryptoScheme::decode(const std::vector<BigUnsigned>& enc) {
 }
 
 BigUnsigned CryptoScheme::random(unsigned short numBits) {
-    std::mt19937_64 rng(std::chrono::high_resolution_clock::now().time_since_epoch().count());
-
     BigUnsigned res = 0, summand = 1;
     for (int i = 1; i < numBits; i++) {
         if (rng()%2) res += summand;

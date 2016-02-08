@@ -6,6 +6,8 @@
 #include <random>
 
 class CryptoScheme {
+private:
+    static std::mt19937_64 rng;
 public:
     CryptoScheme();
     static std::vector<BigUnsigned> encode(const std::string& msg);
@@ -16,6 +18,7 @@ public:
     static BigUnsigned findOrder(const BigUnsigned& n, const BigUnsigned& modulus);
     static BigUnsigned primePi(const BigUnsigned& n); ///used to test accuracy of isProbablyPrime
     static bool isProbablyPrime(const BigUnsigned& num);
+    static void seedRNG();
 
     virtual BigUnsigned getModulus() const = 0;
     virtual BigUnsigned decrypt(void* cipher) const = 0;
