@@ -13,7 +13,7 @@
 #include "DLPAttacker.h"
 #include "RSA.h"
 #include "IntegerFactorer.h"
-#include "FiniteField.h"
+#include "EllipticCurve.h"
 
 using namespace std;
 
