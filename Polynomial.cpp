@@ -136,6 +136,11 @@ bool Polynomial::operator==(const Polynomial& rhs) const {
     return equal(coeffs.begin(), coeffs.end(), rhs.coeffs.begin());
 }
 
+bool Polynomial::operator!=(const Polynomial& rhs) const {
+    if (coeffs.size() != rhs.coeffs.size()) return true;
+    return !equal(coeffs.begin(), coeffs.end(), rhs.coeffs.begin());
+}
+
 bool Polynomial::operator<(const Polynomial& rhs) const {
     return coeffs.size() < rhs.coeffs.size();
 }

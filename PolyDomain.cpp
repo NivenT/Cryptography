@@ -55,6 +55,14 @@ Polynomial PolyDomain::operator()(const std::initializer_list<FieldElement>& c) 
     return makeElement(std::vector<FieldElement>(c.begin(), c.end()));
 }
 
+Polynomial PolyDomain::operator()(const std::initializer_list<BigUnsigned>& c) const {
+    std::vector<FieldElement> coeffs(c.size());
+    std::transform(c.begin(), c.end(), coeffs.begin(), [&](const BigUnsigned& b) {
+                        return field->makeElement(b);
+                   });
+    return makeElement(coeffs);
+}
+
 std::ostream& operator<<(std::ostream &os, const PolyDomain& x) {
     return os<<*x.getField()<<"[x]";
 }

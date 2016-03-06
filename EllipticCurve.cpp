@@ -4,6 +4,7 @@
 
 EllipticCurve::EllipticCurve(const FiniteField* f, const FFElement& a, const FFElement& b) : field(f), a(a), b(b) {
     assert(a.getField() == f && b.getField() == f);
+    assert(f->getP() > 3 && "Only fields with characteristic > 5 are supported for elliptic curves");
 }
 
 const FiniteField* EllipticCurve::getField() const {
@@ -27,7 +28,7 @@ ECPoint EllipticCurve::makeElement(const FFElement& x, const FFElement& y) const
 }
 
 ECPoint EllipticCurve::makeElement() const {
-    return ECPoint(field->makeElement(0), field->makeElement(0), this, true);
+    return ECPoint(this);
 }
 
 ECPoint EllipticCurve::operator()(const FFElement& x, const FFElement& y) const {
@@ -35,7 +36,7 @@ ECPoint EllipticCurve::operator()(const FFElement& x, const FFElement& y) const 
 }
 
 ECPoint EllipticCurve::operator()() const {
-    return makeElement();
+    return ECPoint(this);
 }
 
 std::ostream& operator<<(std::ostream &os, const EllipticCurve& x) {

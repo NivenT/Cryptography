@@ -27,13 +27,16 @@ int main() {
         Polynomial c1 = p23({f23(12),f23(23),f23(33),f23(46),f23(15)}),
                    c2 = p23({f23(64),f23(57),f23(84)});
 
-        FiniteField f(23, 3);
+        Polynomial irred = p23({18, 21, 4, 6});
+
+        FiniteField f(irred);
         FFElement   d1 = f(c1),
                     d2 = f(c2);
 
-        FFElement eca = f.rand(), ecb = f.rand();
+        FFElement eca = f({17, 5, 12}), ecb = f({12, 17, 14});
         EllipticCurve e233(&f, eca, ecb);
 
+        /**
         FFElement x1 = f.rand(), y1 = f.rand();
         while (!e233.onCurve(x1, y1)) {
             x1 = f.rand(); y1 = f.rand();
@@ -42,6 +45,10 @@ int main() {
         while (!e233.onCurve(x2, y2)) {
             x2 = f.rand(); y2 = f.rand();
         }
+        /**/
+        FFElement x1 = f({11, 8, 17}),   y1 = f({14, 8, 17}),
+                  x2 = f({6, 10, 22}),   y2 = f({11, 12, 1});
+        /**/
 
         ECPoint p1 = e233(x1, y1), p2 = e233(x2, y2), ideal = e233();
 
@@ -75,7 +82,10 @@ int main() {
             <<"("<<d1/d2<<") * ("<<d2<<") = "<<(d1/d2)*d2<<endl
             <<endl;
         cout<<"Arithmetic in the elliptic curve "<<e233<<endl
-            <<p1<<" + "<<p2<<" = "<<ideal<<endl
+            <<p1<<" + "<<p2<<" = "<<p1+p2<<endl
+            <<p1<<" - "<<p2<<" = "<<p1-p2<<endl
+            <<p1<<" + "<<p1<<" = "<<p1+p1<<endl
+            <<100<<" * "<<p1<<" = "<<p1*100<<endl
             <<endl;
     #else
         #if (ENCRYPTION == ELGAMAL)

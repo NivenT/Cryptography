@@ -8,7 +8,23 @@ FiniteField::FiniteField(const BigUnsigned& p, const BigUnsigned& k) : p(p), k(k
     modulus = domain->generateIrreducible(k);
 }
 
-PolyDomain* FiniteField::getDomain() const {
+FiniteField::FiniteField(const PrimeField* f, const BigUnsigned& k) : p(f->getMod()), k(k) {
+    assert(k > 1 && "Use PrimeField if k==1");
+    domain = new PolyDomain(f);
+    modulus = domain->generateIrreducible(k);
+}
+
+FiniteField::FiniteField(const PolyDomain* d, const BigUnsigned& k) : p(d->getField()->getMod()), k(k), domain(d) {
+    assert(k > 1 && "Use PrimeField if k==1");
+    modulus = domain->generateIrreducible(k);
+}
+
+FiniteField::FiniteField(const Polynomial& irred) : p(irred.getMod()), k(irred.degree()), domain(irred.getDomain()), modulus(irred) {
+    assert(k > 1 && "Use PrimeField if k==1");
+    assert(irred.isIrreducible());
+}
+
+const PolyDomain* FiniteField::getDomain() const {
     return domain;
 }
 
@@ -62,6 +78,10 @@ FFElement FiniteField::operator()(const FieldElement& c) const {
 
 FFElement FiniteField::operator()(const std::initializer_list<FieldElement>& coeffs) const {
     return makeElement(std::vector<FieldElement>(coeffs.begin(), coeffs.end()));
+}
+
+FFElement FiniteField::operator()(const std::initializer_list<BigUnsigned>& coeffs) const {
+    return makeElement((*domain)(coeffs));
 }
 
 std::ostream& operator<<(std::ostream &os, const FiniteField& x) {

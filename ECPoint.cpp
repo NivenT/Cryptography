@@ -7,6 +7,8 @@ ECPoint::ECPoint(const FFElement& x, const FFElement& y, const EllipticCurve* c,
     assert(ideal || y*y == x*x*x + c->getA()*x + c->getB());
 }
 
+ECPoint::ECPoint(const EllipticCurve* c) : x(c->getField()->makeElement(0)), y(c->getField()->makeElement(0)), curve(c), ideal(true) {}
+
 const EllipticCurve* ECPoint::getCurve() const {
     return curve;
 }
@@ -21,6 +23,56 @@ FFElement ECPoint::getY() const {
 
 bool ECPoint::isIdeal() const {
     return ideal;
+}
+
+ECPoint ECPoint::operator+(const ECPoint& rhs) const {
+    assert(curve == rhs.curve);
+    if (ideal) return rhs;
+    else if (rhs.ideal) return *this;
+    else if (x == rhs.x) {
+        if (y == -rhs.y) return ECPoint(curve);
+        FFElement slope = (x*x + x*x + x*x + curve->getA())/(y+y);
+        FFElement x3 = slope*slope - x - x;
+
+        return ECPoint(x3, -(slope*(x3-x)+y), curve);
+    } else {
+        FFElement slope = (rhs.y-y)/(rhs.x-x);
+        FFElement x3 = slope*slope - x - rhs.x;
+
+        return ECPoint(x3, -(slope*(x3-x)+y), curve);
+    }
+}
+
+ECPoint ECPoint::operator-() const {
+    return ideal ? *this : ECPoint(x, -y, curve);
+}
+
+ECPoint ECPoint::operator-(const ECPoint& rhs) const {
+    assert(curve == rhs.curve);
+    return *this + (-rhs);
+}
+
+ECPoint ECPoint::operator*(const BigUnsigned& rhs) const {
+    if (rhs == 0 || ideal) return ECPoint(curve);
+    ECPoint res = ECPoint(curve);
+    ECPoint summand = *this;
+    BigUnsigned n = 1;
+    while (rhs > n) {
+        res = (rhs & n) > 0 ? res + summand : res;
+        summand = summand+summand;
+        n <<= 1;
+    }
+    return res;
+}
+
+bool ECPoint::operator==(const ECPoint& rhs) const {
+    assert(curve == rhs.curve);
+    return (ideal || rhs.ideal) ? (ideal && rhs.ideal) : x == rhs.x && y == rhs.y;
+}
+
+bool ECPoint::operator!=(const ECPoint& rhs) const {
+    assert(curve == rhs.curve);
+    return (ideal || rhs.ideal) ? (!ideal || !rhs.ideal) : x != rhs.x || y != rhs.y;
 }
 
 void printCoord(std::ostream &os, const FFElement& x) {

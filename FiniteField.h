@@ -63,6 +63,7 @@ public:
     Polynomial operator()(const BigUnsigned& n) const;
     Polynomial operator()(const FieldElement& n) const;
     Polynomial operator()(const std::initializer_list<FieldElement>& coeffs) const;
+    Polynomial operator()(const std::initializer_list<BigUnsigned>& coeffs) const;
 };
 
 std::ostream& operator<<(std::ostream &os, const PolyDomain& x);
@@ -102,6 +103,7 @@ public:
     bool operator!=(const BigUnsigned& rhs) const;
 
     bool operator==(const Polynomial& rhs) const;
+    bool operator!=(const Polynomial& rhs) const;
     bool operator<(const Polynomial& rhs) const;
 
     friend PolyDomain;
@@ -111,12 +113,15 @@ std::ostream& operator<<(std::ostream &os, const Polynomial& x);
 
 class FiniteField {
 private:
-    PolyDomain* domain;
+    const PolyDomain* domain;
     BigUnsigned p, k;
     Polynomial modulus;
 public:
     FiniteField(const BigUnsigned& p, const BigUnsigned& k);
-    PolyDomain* getDomain() const;
+    FiniteField(const PrimeField* f, const BigUnsigned& k);
+    FiniteField(const PolyDomain* d, const BigUnsigned& k);
+    FiniteField(const Polynomial& irred);
+    const PolyDomain* getDomain() const;
     BigUnsigned getP() const;
     BigUnsigned getK() const;
     Polynomial getMod() const;
@@ -131,6 +136,7 @@ public:
     FFElement operator()(const BigUnsigned& n) const;
     FFElement operator()(const FieldElement& n) const;
     FFElement operator()(const std::initializer_list<FieldElement>& coeffs) const;
+    FFElement operator()(const std::initializer_list<BigUnsigned>& coeffs) const;
 };
 
 std::ostream& operator<<(std::ostream &os, const FiniteField& x);
