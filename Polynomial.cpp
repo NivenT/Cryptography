@@ -131,6 +131,11 @@ bool Polynomial::operator!=(const BigUnsigned& rhs) const {
     return coeffs.size() == 1 ? coeffs.back().getVal() != rhs : (coeffs.size() != 0 || rhs != 0);
 }
 
+bool Polynomial::operator==(const Polynomial& rhs) const {
+    if (coeffs.size() != rhs.coeffs.size()) return false;
+    return equal(coeffs.begin(), coeffs.end(), rhs.coeffs.begin());
+}
+
 bool Polynomial::operator<(const Polynomial& rhs) const {
     return coeffs.size() < rhs.coeffs.size();
 }

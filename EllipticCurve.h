@@ -12,9 +12,14 @@ private:
 public:
     EllipticCurve(const FiniteField* f, const FFElement& a, const FFElement& b);
     const FiniteField* getField() const;
+    FFElement getA() const;
+    FFElement getB() const;
+    bool onCurve(const FFElement& x, const FFElement& y) const;
 
     ECPoint makeElement(const FFElement& x, const FFElement& y) const;
+    ECPoint makeElement() const;
     ECPoint operator()(const FFElement& x, const FFElement& y) const;
+    ECPoint operator()() const;
 };
 
 std::ostream& operator<<(std::ostream &os, const EllipticCurve& x);
@@ -22,11 +27,17 @@ std::ostream& operator<<(std::ostream &os, const EllipticCurve& x);
 class ECPoint {
 private:
     ECPoint(const FFElement& x, const FFElement& y, const EllipticCurve* c, bool ideal = false);
+    ECPoint(const EllipticCurve* c);
 
     const EllipticCurve* curve;
     FFElement x, y;
-    bool isIdeal;
+    bool ideal;
 public:
+    const EllipticCurve* getCurve() const;
+    FFElement getX() const;
+    FFElement getY() const;
+    bool isIdeal() const;
+
     ECPoint operator+(const ECPoint& rhs) const;
     ECPoint operator-(const ECPoint& rhs) const;
     ECPoint operator*(const BigUnsigned& rhs) const;

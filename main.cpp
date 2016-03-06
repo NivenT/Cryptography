@@ -31,6 +31,20 @@ int main() {
         FFElement   d1 = f(c1),
                     d2 = f(c2);
 
+        FFElement eca = f.rand(), ecb = f.rand();
+        EllipticCurve e233(&f, eca, ecb);
+
+        FFElement x1 = f.rand(), y1 = f.rand();
+        while (!e233.onCurve(x1, y1)) {
+            x1 = f.rand(); y1 = f.rand();
+        }
+        FFElement x2 = f.rand(), y2 = f.rand();
+        while (!e233.onCurve(x2, y2)) {
+            x2 = f.rand(); y2 = f.rand();
+        }
+
+        ECPoint p1 = e233(x1, y1), p2 = e233(x2, y2), ideal = e233();
+
         cout<<a<<" + "<<b<<" = "<<a+b<<endl
             <<a<<" - "<<b<<" = "<<a-b<<endl
             <<a<<" * "<<b<<" = "<<a*b<<endl
@@ -58,7 +72,11 @@ int main() {
             <<"("<<d1<<")^-1 = "<<d1.inverse()<<endl
             <<"("<<d1.inverse()<<") * ("<<d1<<") = "<<d1.inverse()*d1<<endl
             <<"("<<d1<<") / ("<<d2<<") = "<<d1/d2<<endl
-            <<"("<<d1/d2<<") * ("<<d2<<") = "<<(d1/d2)*d2<<endl;
+            <<"("<<d1/d2<<") * ("<<d2<<") = "<<(d1/d2)*d2<<endl
+            <<endl;
+        cout<<"Arithmetic in the elliptic curve "<<e233<<endl
+            <<p1<<" + "<<p2<<" = "<<ideal<<endl
+            <<endl;
     #else
         #if (ENCRYPTION == ELGAMAL)
             CryptoScheme* crypt = new Elgamal;

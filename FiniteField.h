@@ -93,13 +93,15 @@ public:
     Polynomial operator-(const Polynomial& rhs) const;
     Polynomial operator*(const FieldElement& rhs) const;
     Polynomial operator*(const Polynomial& rhs) const;
-    /// a = b*q + r
+    /// this = rhs*q + r
     Polynomial operator/(const Polynomial& rhs) const; //returns q
     Polynomial operator%(const Polynomial& rhs) const; //returns r
     Polynomial operator-() const;
 
     bool operator==(const BigUnsigned& rhs) const;
     bool operator!=(const BigUnsigned& rhs) const;
+
+    bool operator==(const Polynomial& rhs) const;
     bool operator<(const Polynomial& rhs) const;
 
     friend PolyDomain;
@@ -123,6 +125,7 @@ public:
     FFElement makeElement(const BigUnsigned& c) const;
     FFElement makeElement(const FieldElement& c) const;
     FFElement makeElement(const std::vector<FieldElement>& coeffs) const;
+    FFElement rand() const;
 
     FFElement operator()(const Polynomial& p) const;
     FFElement operator()(const BigUnsigned& n) const;

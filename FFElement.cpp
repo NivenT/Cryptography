@@ -49,6 +49,11 @@ FFElement FFElement::operator-() const {
     return FFElement(-val, field);
 }
 
+bool FFElement::operator==(const FFElement& rhs) const {
+    assert(field == rhs.field);
+    return val == rhs.val;
+}
+
 std::ostream& operator<<(std::ostream &os, const FFElement& x) {
     if (x.getVal().size() == 0) return os<<"0 "<<(char)238<<" "<<*x.getField();
     if (x.getVal()[0].getVal() != 0) os<<x.getVal()[0].getVal();

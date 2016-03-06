@@ -24,6 +24,10 @@ Polynomial FiniteField::getMod() const {
     return modulus;
 }
 
+FFElement FiniteField::rand() const {
+    return makeElement(domain->randomPoly(k+1));
+}
+
 FFElement FiniteField::makeElement(const Polynomial& p) const {
     assert(p.getMod() == getP());
     if (p.getDomain() == domain) return FFElement(p, this);
