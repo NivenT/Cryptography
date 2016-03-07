@@ -12,7 +12,7 @@ ECElgamal::ECElgamal() {}
 
 void ECElgamal::init(unsigned short keyLength) {
     p = CryptoScheme::genPrime(keyLength+1);
-    FiniteField* f = new FiniteField(p, CryptoScheme::random(2));
+    FiniteField* f = new FiniteField(p, 1);
     FFElement a = f->rand(), x = f->rand(), y = f->rand();
     curve = EllipticCurve(f, a, y*y-(x*x*x+a*x)); //b calculated so that (x,y) is on the curve
 

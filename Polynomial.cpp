@@ -166,6 +166,7 @@ Polynomial Polynomial::powmod(const BigUnsigned& rhs, const Polynomial& modulus)
 }
 
 bool Polynomial::isIrreducible() const {
+    if (degree() <= 1) return true;
     Polynomial x = (*domain)({domain->getField()->makeElement(0),domain->getField()->makeElement(1)});
     Polynomial xPower = x;
     for (BigUnsigned k = 0; k <= degree()/2; k++) {

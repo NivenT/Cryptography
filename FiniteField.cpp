@@ -85,5 +85,5 @@ FFElement FiniteField::operator()(const std::initializer_list<BigUnsigned>& coef
 }
 
 std::ostream& operator<<(std::ostream &os, const FiniteField& x) {
-    return os<<"F_{"<<x.getP()<<"^"<<x.getK()<<"}";
+    return x.getK() == 1 ? os<<"F_"<<x.getP() : os<<"F_{"<<x.getP()<<"^"<<x.getK()<<"}";
 }

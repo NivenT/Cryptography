@@ -30,7 +30,7 @@ int main() {
 
         Polynomial irred = p23({18, 21, 4, 6});
 
-        FiniteField f(irred);
+        FiniteField f(23, 1);
         FFElement   d1 = f(c1),
                     d2 = f(c2);
 
@@ -46,12 +46,12 @@ int main() {
         while (!e233.onCurve(x2, y2)) {
             x2 = f.rand(); y2 = f.rand();
         }
-        /**/
+        /**
         FFElement x1 = f({11, 8, 17}),   y1 = f({14, 8, 17}),
                   x2 = f({6, 10, 22}),   y2 = f({11, 12, 1});
         /**/
 
-        ECPoint p1 = e233(x1, y1), p2 = e233(x2, y2), ideal = e233();
+        //ECPoint p1 = e233(x1, y1), p2 = e233(x2, y2), ideal = e233();
 
         cout<<a<<" + "<<b<<" = "<<a+b<<endl
             <<a<<" - "<<b<<" = "<<a-b<<endl
@@ -82,12 +82,14 @@ int main() {
             <<"("<<d1<<") / ("<<d2<<") = "<<d1/d2<<endl
             <<"("<<d1/d2<<") * ("<<d2<<") = "<<(d1/d2)*d2<<endl
             <<endl;
+        /*
         cout<<"Arithmetic in the elliptic curve "<<e233<<endl
             <<p1<<" + "<<p2<<" = "<<p1+p2<<endl
             <<p1<<" - "<<p2<<" = "<<p1-p2<<endl
             <<p1<<" + "<<p1<<" = "<<p1+p1<<endl
             <<100<<" * "<<p1<<" = "<<p1*100<<endl
             <<endl;
+        */
     #else
         #if (ENCRYPTION == ELGAMAL)
             CryptoScheme* crypt = new Elgamal;
@@ -104,7 +106,7 @@ int main() {
                 crypt->init(50);
             #endif //ENCRYPTION
         #elif (ENCRYPTION == ECELGAMAL)
-            crypt->init(50); ///EC Arithmetic is slow so decryption takes a while even with small numbers
+            crypt->init(100); ///EC Arithmetic is slow so decryption takes a while even with small numbers
         #else
             crypt->init(200);
         #endif //ATTACK
