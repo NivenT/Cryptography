@@ -9,6 +9,8 @@ ECPoint::ECPoint(const FFElement& x, const FFElement& y, const EllipticCurve* c,
 
 ECPoint::ECPoint(const EllipticCurve* c) : x(c->getField()->makeElement(0)), y(c->getField()->makeElement(0)), curve(c), ideal(true) {}
 
+ECPoint::ECPoint() : curve(nullptr), ideal(true) {}
+
 const EllipticCurve* ECPoint::getCurve() const {
     return curve;
 }
@@ -31,7 +33,7 @@ ECPoint ECPoint::operator+(const ECPoint& rhs) const {
     else if (rhs.ideal) return *this;
     else if (x == rhs.x) {
         if (y == -rhs.y) return ECPoint(curve);
-        FFElement slope = (x*x + x*x + x*x + curve->getA())/(y+y);
+        FFElement slope = (x*x*curve->getField()->makeElement(3) + curve->getA())/(y+y);
         FFElement x3 = slope*slope - x - x;
 
         return ECPoint(x3, -(slope*(x3-x)+y), curve);

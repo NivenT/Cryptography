@@ -12,7 +12,6 @@ private:
     Epair encrypt(const BigUnsigned& msg, const BigUnsigned& k) const;
 
     BigUnsigned priv;
-    BigUnsigned k;
 public:
     Elgamal();
     void init(unsigned short keyLength);
@@ -22,7 +21,6 @@ public:
 
     BigUnsigned pub;
     BigUnsigned p, g;
-    unsigned short keyLength;
 };
 
 #endif // ELGAMAL_H_INCLUDED

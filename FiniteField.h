@@ -148,6 +148,7 @@ private:
     const FiniteField* field;
     Polynomial val;
 public:
+    FFElement();
     const FiniteField* getField() const;
     Polynomial getVal() const;
     FFElement inverse() const;
@@ -160,6 +161,8 @@ public:
 
     bool operator==(const FFElement& rhs) const;
     bool operator!=(const FFElement& rhs) const;
+
+    bool operator!=(const BigUnsigned& rhs) const;
 
     friend FiniteField;
 };

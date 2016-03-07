@@ -1,10 +1,11 @@
-#define TEST_FIELDS
-#define ATTACK
+//#define TEST_FIELDS
+//#define ATTACK
 
 #define ELGAMAL     0
 #define USING_RSA   1
+#define ECELGAMAL   2
 
-#define ENCRYPTION  1 /// Change this value to change the type of encryption
+#define ENCRYPTION  2 /// Change this value to change the type of encryption
 
 #include <iostream>
 #include <chrono>
@@ -13,7 +14,7 @@
 #include "DLPAttacker.h"
 #include "RSA.h"
 #include "IntegerFactorer.h"
-#include "EllipticCurve.h"
+#include "ECElgamal.h"
 
 using namespace std;
 
@@ -92,6 +93,8 @@ int main() {
             CryptoScheme* crypt = new Elgamal;
         #elif (ENCRYPTION == USING_RSA)
             CryptoScheme* crypt = new RSA;
+        #elif (ENCRYPTION == ECELGAMAL)
+            CryptoScheme* crypt = new ECElgamal;
         #endif // ENCRYPTION
 
         #ifdef ATTACK
@@ -100,19 +103,22 @@ int main() {
             #elif (ENCRYPTION == USING_RSA)
                 crypt->init(50);
             #endif //ENCRYPTION
+        #elif (ENCRYPTION == ECELGAMAL)
+            crypt->init(50); ///EC Arithmetic is slow so decryption takes a while even with small numbers
         #else
             crypt->init(200);
         #endif //ATTACK
 
         string msg = "Hello, World";
+        cout<<"Original message: "<<msg<<endl;
+
         vector<BigUnsigned> encoding = CryptoScheme::encode(msg);
         vector<void*> cipher(encoding.size());
         for (int i = 0; i < encoding.size(); i++) {
             cipher[i] = crypt->encrypt(encoding[i]);
             encoding[i] = crypt->decrypt(cipher[i]);
         }
-        cout<<"Original message:  "<<msg<<endl
-            <<"Decrypted message: "<<CryptoScheme::decode(encoding)<<endl
+        cout<<"Decrypted message: "<<CryptoScheme::decode(encoding)<<endl
             <<endl;
 
         #ifdef ATTACK

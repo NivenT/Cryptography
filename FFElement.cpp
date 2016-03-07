@@ -4,6 +4,8 @@
 
 FFElement::FFElement(const Polynomial& poly, const FiniteField* f) : val(poly%f->getMod()), field(f) {}
 
+FFElement::FFElement() : field(nullptr) {}
+
 const FiniteField* FFElement::getField() const {
     return field;
 }
@@ -57,6 +59,10 @@ bool FFElement::operator==(const FFElement& rhs) const {
 bool FFElement::operator!=(const FFElement& rhs) const {
     assert(field == rhs.field);
     return val != rhs.val;
+}
+
+bool FFElement::operator!=(const BigUnsigned& rhs) const {
+    return val != rhs;
 }
 
 std::ostream& operator<<(std::ostream &os, const FFElement& x) {

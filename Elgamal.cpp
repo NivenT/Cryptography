@@ -12,7 +12,6 @@ Elgamal::Elgamal() {
 }
 
 void Elgamal::init(unsigned short keyLength) {
-    this->keyLength = keyLength;
     p = CryptoScheme::genPrime(keyLength+1);
     g = CryptoScheme::genCoprime(p-1);
     priv = CryptoScheme::random(keyLength);
@@ -33,12 +32,12 @@ Epair Elgamal::encrypt(const BigUnsigned& msg, const BigUnsigned& k) const {
 
 void* Elgamal::encrypt(const BigUnsigned& msg) const {
     #ifdef DEBUG
-        BigUnsigned k = CryptoScheme::random(keyLength);
+        BigUnsigned k = CryptoScheme::random(priv.bitLength());
         Epair cipher = encrypt(msg, k);
         cout<<msg<<" -> ("<<cipher.first<<", "<<cipher.second<<")"<<" (encryption)"<<endl;
         return new Epair(cipher);
     #else
-        return new Epair(encrypt(msg, CryptoScheme::random(keyLength)));
+        return new Epair(encrypt(msg, CryptoScheme::random(priv.bitLength())));
     #endif // DEBUG
 }
 

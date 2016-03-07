@@ -19,7 +19,6 @@ void RSA::init(unsigned short keyLength) {
     BigUnsigned p = CryptoScheme::genPrime(keyLength/2), q = CryptoScheme::genPrime(keyLength/2);
     BigUnsigned phi = (p-1)*(q-1);
     priv = CryptoScheme::genCoprime(phi);
-    this->keyLength = priv.bitLength();
 
     n = p*q;
     pub = modinv(priv, phi);

@@ -11,6 +11,7 @@ private:
     FFElement a, b; /// y^2 = x^3 + ax + b
 public:
     EllipticCurve(const FiniteField* f, const FFElement& a, const FFElement& b);
+    EllipticCurve();
     const FiniteField* getField() const;
     FFElement getA() const;
     FFElement getB() const;
@@ -33,6 +34,7 @@ private:
     FFElement x, y;
     bool ideal;
 public:
+    ECPoint();
     const EllipticCurve* getCurve() const;
     FFElement getX() const;
     FFElement getY() const;

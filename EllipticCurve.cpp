@@ -4,8 +4,11 @@
 
 EllipticCurve::EllipticCurve(const FiniteField* f, const FFElement& a, const FFElement& b) : field(f), a(a), b(b) {
     assert(a.getField() == f && b.getField() == f);
-    assert(f->getP() > 3 && "Only fields with characteristic > 5 are supported for elliptic curves");
+    assert(f->getP() > 3 && "Only fields with characteristic >= 5 are supported for elliptic curves");
+    assert(f->makeElement(4)*a*a*a + f->makeElement(27)*b*b != 0);
 }
+
+EllipticCurve::EllipticCurve() : field(nullptr) {}
 
 const FiniteField* EllipticCurve::getField() const {
     return field;

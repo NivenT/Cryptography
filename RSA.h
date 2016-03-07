@@ -15,7 +15,6 @@ public:
 
     BigUnsigned pub;
     BigUnsigned n;
-    unsigned short keyLength;
 };
 
 #endif // RSA_H_INCLUDED
