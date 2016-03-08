@@ -35,14 +35,12 @@ BigUnsigned ECElgamal::getModulus() const {
 }
 
 ECEpair ECElgamal::encrypt(const BigUnsigned& msg, const BigUnsigned& k) const {
-    ECPoint s = pubQ*k;
-    return std::make_pair(pubP*k, s.getX()*curve.getField()->makeElement(msg));
+    return std::make_pair(pubP*k, (pubQ*k).getX()*curve.getField()->makeElement(msg));
 }
 
 void* ECElgamal::encrypt(const BigUnsigned& msg) const {
     #ifdef DEBUG
-        BigUnsigned k = CryptoScheme::random(priv.bitLength());
-        ECEpair cipher = encrypt(msg, k);
+        ECEpair cipher = encrypt(msg, CryptoScheme::random(priv.bitLength()));
         cout<<msg<<" -> ("<<cipher.first<<", "<<cipher.second<<")"<<" (encryption)"<<endl;
         return new ECEpair(cipher);
     #else
@@ -52,12 +50,11 @@ void* ECElgamal::encrypt(const BigUnsigned& msg) const {
 
 BigUnsigned ECElgamal::decrypt(void* cipher) const {
     ECEpair cipherPair = *(ECEpair*)cipher;
-    ECPoint s = cipherPair.first*priv;
     #ifdef DEBUG
-        BigUnsigned decrypted = (cipherPair.second/s.getX()).getVal()[0].getVal();
+        BigUnsigned decrypted = (cipherPair.second/(cipherPair.first*priv).getX()).getVal()[0].getVal();
         cout<<"("<<cipherPair.first<<", "<<cipherPair.second<<") -> "<<decrypted<<" (decryption)"<<endl;
         return decrypted;
     #else
-        return (cipherPair.second/s.getX()).getVal()[0].getVal();
+        return (cipherPair.second/(cipherPair.first*priv).getX()).getVal()[0].getVal();
     #endif // DEBUG
 }

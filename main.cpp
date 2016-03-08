@@ -1,5 +1,5 @@
 //#define TEST_FIELDS
-//#define ATTACK
+#define ATTACK
 
 #define ELGAMAL     0
 #define USING_RSA   1
@@ -15,6 +15,7 @@
 #include "RSA.h"
 #include "IntegerFactorer.h"
 #include "ECElgamal.h"
+#include "ECDLPAttacker.h"
 
 using namespace std;
 
@@ -30,7 +31,7 @@ int main() {
 
         Polynomial irred = p23({18, 21, 4, 6});
 
-        FiniteField f(23, 1);
+        FiniteField f(irred);
         FFElement   d1 = f(c1),
                     d2 = f(c2);
 
@@ -46,12 +47,12 @@ int main() {
         while (!e233.onCurve(x2, y2)) {
             x2 = f.rand(); y2 = f.rand();
         }
-        /**
+        /**/
         FFElement x1 = f({11, 8, 17}),   y1 = f({14, 8, 17}),
                   x2 = f({6, 10, 22}),   y2 = f({11, 12, 1});
         /**/
 
-        //ECPoint p1 = e233(x1, y1), p2 = e233(x2, y2), ideal = e233();
+        ECPoint p1 = e233(x1, y1), p2 = e233(x2, y2), ideal = e233();
 
         cout<<a<<" + "<<b<<" = "<<a+b<<endl
             <<a<<" - "<<b<<" = "<<a-b<<endl
@@ -82,14 +83,12 @@ int main() {
             <<"("<<d1<<") / ("<<d2<<") = "<<d1/d2<<endl
             <<"("<<d1/d2<<") * ("<<d2<<") = "<<(d1/d2)*d2<<endl
             <<endl;
-        /*
         cout<<"Arithmetic in the elliptic curve "<<e233<<endl
             <<p1<<" + "<<p2<<" = "<<p1+p2<<endl
             <<p1<<" - "<<p2<<" = "<<p1-p2<<endl
             <<p1<<" + "<<p1<<" = "<<p1+p1<<endl
             <<100<<" * "<<p1<<" = "<<p1*100<<endl
             <<endl;
-        */
     #else
         #if (ENCRYPTION == ELGAMAL)
             CryptoScheme* crypt = new Elgamal;
@@ -104,6 +103,8 @@ int main() {
                 crypt->init(25);
             #elif (ENCRYPTION == USING_RSA)
                 crypt->init(50);
+            #elif (ENCRYPTION == ECELGAMAL)
+                crypt->init(20);
             #endif //ENCRYPTION
         #elif (ENCRYPTION == ECELGAMAL)
             crypt->init(100); ///EC Arithmetic is slow so decryption takes a while even with small numbers
@@ -147,6 +148,15 @@ int main() {
                 for (int i = 0; i < cipher.size(); i++) {
                     BigUnsigned c = *(BigUnsigned*)cipher[i];
                     decryption[i] = modexp(c, d, rCrypt->getModulus());
+                }
+            #elif (ENCRYPTION == ECELGAMAL)
+                ECElgamal* eCrypt = (ECElgamal*)crypt;
+
+                BigUnsigned order = eCrypt->pubP.findOrder();
+                for (int i = 0; i < cipher.size(); i++) {
+                    ECEpair p = *(ECEpair*)cipher[i];
+                    BigUnsigned k = ECDLPAttacker::babyGiant(eCrypt->pubP, p.first, order);
+                    decryption[i] = (p.second/(eCrypt->pubQ*k).getX()).getVal()[0].getVal();
                 }
             #endif // ENCRYPTION
             chrono::seconds durr = chrono::duration_cast<chrono::seconds>(chrono::high_resolution_clock::now() - start);

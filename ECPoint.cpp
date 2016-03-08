@@ -15,6 +15,14 @@ const EllipticCurve* ECPoint::getCurve() const {
     return curve;
 }
 
+BigUnsigned ECPoint::findOrder() const {
+    ECPoint q = *this+*this;
+    for (BigUnsigned order = 2;; order++) {
+        if (q.ideal) return order;
+        q = q+*this;
+    }
+}
+
 FFElement ECPoint::getX() const {
     return x;
 }

@@ -36,6 +36,7 @@ private:
 public:
     ECPoint();
     const EllipticCurve* getCurve() const;
+    BigUnsigned findOrder() const;
     FFElement getX() const;
     FFElement getY() const;
     bool isIdeal() const;

@@ -32,8 +32,7 @@ Epair Elgamal::encrypt(const BigUnsigned& msg, const BigUnsigned& k) const {
 
 void* Elgamal::encrypt(const BigUnsigned& msg) const {
     #ifdef DEBUG
-        BigUnsigned k = CryptoScheme::random(priv.bitLength());
-        Epair cipher = encrypt(msg, k);
+        Epair cipher = encrypt(msg, CryptoScheme::random(priv.bitLength()));
         cout<<msg<<" -> ("<<cipher.first<<", "<<cipher.second<<")"<<" (encryption)"<<endl;
         return new Epair(cipher);
     #else

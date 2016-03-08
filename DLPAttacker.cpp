@@ -28,7 +28,8 @@ BigUnsigned DLPAttacker::babyGiant(const BigUnsigned& g, const BigUnsigned& h, c
         <<"h:     "<<h<<endl
         <<"p:     "<<p<<endl
         <<"order: "<<o<<endl
-        <<"n:     "<<n<<endl;
+        <<"n:     "<<n<<endl
+        <<endl;
     #endif // DEBUG
     BigUnsigned u = modinv(modexp(g, n, p), p);
     BigUnsigned l1 = 1, l2 = h;
